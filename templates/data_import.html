@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绩效考勤数据管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/data_import.css') }}">
+</head>
+<body>
+<!-- 侧边栏 -->
+<div class="sidebar">
+    <h2>绩效管理系统</h2>
+    <ul>
+        <li class="menu-item">
+            <a href="{{ url_for('table_index') }}">绩效考核</a>
+            <ul class="submenu" style="display: block;">
+                <!-- 在考核表发布页面时，这个链接会带有active类 -->
+                <li><a href="{{ url_for('Gentable') }}">考核表发布</a></li>
+                <li><a href="{{ url_for('score_evaluation') }}">绩效评分</a></li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="{{ url_for('member_management') }}">成员管理</a>
+        </li>
+        <li class="menu-item">
+            <a href="#" class="active">系统管理</a>
+            <ul class="submenu">
+                <li><a href="{{ url_for('data_import') }}" class="active"> 数据导入</a></li>
+                <li><a href="{{ url_for('data_export') }}">数据导出</a></li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="{{ url_for('performance_query') }}">绩效查询</a>
+        </li>
+        <!-- 新增登出按钮 -->
+        <li class="menu-item">
+            <a href="{{ url_for('logout') }}" class="logout-btn">登出</a>
+        </li>
+    </ul>
+</div>
+
+
+
+    <div class="main-content">
+        <div class="page-header">
+        <h1>数据导入</h1>
+        </div>
+       <div class="content-wrapper">
+           <div id="importHistory" class="history-section">
+            <h4>最近导入的文件：</h4>
+            <p>加载中...</p>
+        </div>
+
+        <div class="upload-container">
+            <div class="upload-section">
+                <h2>绩效考勤数据导入</h2>
+                <form id="performanceForm" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <div class="file-group">
+                            <label>第一张表格：</label>
+                            <input type="file" name="file1" accept=".xls,.xlsx" required>
+                        </div>
+                        <div class="file-group">
+                            <label>第二张表格：</label>
+                            <input type="file" name="file2" accept=".xls,.xlsx" required>
+                        </div>
+                        <div class="file-group">
+                            <label>第三张表格：</label>
+                            <input type="file" name="file3" accept=".xls,.xlsx" required>
+                        </div>
+                        <button type="submit" class="upload-btn">上传所有表格</button>
+                    </div>
+                </form>
+            </div>
+
+
+<!--            <div class="upload-section">-->
+<!--                <h2>数据统计</h2>-->
+<!--&lt;!&ndash;                <div class="summary-box">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="summary-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        合并后总工时: <span id="totalHours" class="summary-value">0</span> 小时&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
+
+<!--            <div class="table-container">-->
+<!--                <table class="data-table">-->
+<!--                    <thead>-->
+<!--                        <tr>-->
+<!--                            <th>姓名</th>-->
+<!--                            <th>总工时</th>-->
+<!--                        </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody id="dataTableBody">-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    </div>
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data_import.js') }}"></script>
+</body>
+</html>

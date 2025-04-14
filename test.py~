@@ -1,0 +1,14 @@
+import psycopg2
+
+con = psycopg2.connect(database="performance",
+                       user="postgres",
+                       password="postgres",
+                       host="172.22.0.43",
+                       port="5432")
+print(con)
+print("Database opened successfully")
+cur = con.cursor()
+cur.execute('SELECT version()')
+db_version = cur.fetchone()
+print(db_version)
+con.close()

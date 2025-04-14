@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绩效考勤数据管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/data_import.css') }}">
+</head
+<body>
+<!-- 侧边栏 -->
+<div class="sidebar">
+    <h2>绩效管理系统</h2>
+    <ul>
+        <li class="menu-item">
+            <a href="{{ url_for('table_index') }}">绩效考核</a>
+            <ul class="submenu" style="display: block;">
+                <!-- 在考核表发布页面时，这个链接会带有active类 -->
+                <li><a href="{{ url_for('Gentable') }}">考核表发布</a></li>
+                <li><a href="{{ url_for('score_evaluation') }}">绩效评分</a></li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="{{ url_for('member_management') }}">成员管理</a>
+        </li>
+        <li class="menu-item">
+            <a href="#" class="active" >系统管理</a>
+              <ul class="submenu" style="display: block;">
+                <li><a href="{{ url_for('data_import') }}"> 数据导入</a></li>
+                <li><a href="{{ url_for('data_export') }}" class="active"> 数据导出</a></li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="{{ url_for('performance_query') }}">绩效查询</a>
+        </li>
+        <!-- 新增登出按钮 -->
+        <li class="menu-item">
+            <a href="{{ url_for('logout') }}" class="logout-btn">登出</a>
+        </li>
+    </ul>
+</div>
+
+    <div class="main-content">
+        <div class="page-header">
+        <h1>绩效表导出</h1>
+        </div>
+       <div class="content-wrapper">
+        <div class="export-container">
+            <div class="export-section">
+                <h2>绩效表导出</h2>
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label for="departmentSelect">选择部门：</label>
+                        <select id="departmentSelect" class="form-control">
+                            <option value="">请选择部门</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="versionSelect">选择版本：</label>
+                        <select id="versionSelect" class="form-control" disabled>
+                            <option value="">请先选择部门</option>
+                        </select>
+                    </div>
+                    <button id="queryBtn" class="query-btn" disabled>查询</button>
+                </div>
+            </div>
+
+            <div class="result-section" style="display: none;">
+                <div class="result-header">
+                    <h3>查询结果</h3>
+                    <button id="exportBtn" class="export-btn">导出CSV</button>
+                </div>
+                <div class="table-container">
+                    <table class="assessment-table">
+                        <thead>
+                            <tr>
+                                <th>员工ID</th>
+                                <th>姓名</th>
+                                <th>总评级</th>
+                                <th>总分</th>
+                                <th>评估时间</th>
+                                <th>职能分数</th>
+                                <th>产品分数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assessmentTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data_export.js') }}"></script>
+</body>
+</html>

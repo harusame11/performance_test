@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edittable</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edittable.css') }}">
+</head>
+<body>
+<!-- 侧边栏保持不变 -->
+<!-- 更新主内容区域 -->
+<div class="content">
+
+    <div class="container">
+        <div class="header">
+            <div class="date-display">
+                <span>考核周期：</span>
+                <select id="year-select" class="year-select">
+                    <!-- 动态生成的年份选项 -->
+                </select>
+                <select id="quarter-select" class="quarter-select">
+                    <!-- 固定的季度选项 -->
+                </select>
+            </div>
+
+
+        </div>
+        <div class="section-title">考核维度</div>
+        <div class="department-select-container">
+            <label for="department-select">选择部门：</label>
+            <select id="department-select">
+                <option value="">请选择部门</option>
+                <!-- 部门选项将通过 JavaScript 动态添加 -->
+            </select>
+        </div>
+        <!-- 职能表现部分 -->
+        <!-- 专业职能部分 - 已经正确 -->
+        <div class="dimension-section">
+            <div class="dimension-header">
+                <div class="dimension-title">专业职能</div>
+                <select class="evaluation-mode-select">
+                    <option value="rating">评级</option>
+                    <option value="scoring">打分</option>
+                </select>
+                <span class="dimension-score-container">
+            <span class="dimension-score-display" title="点击编辑" contenteditable="true">30</span>（该项分数）
+        </span>
+            </div>
+            <div class="criteria-list">
+                <div class="add-criteria">
+                    <span>+ 添加评分项</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通用职能部分 - 需要修正 -->
+        <div class="dimension-section">
+            <div class="dimension-header">
+                <div class="dimension-title">通用职能</div>
+                <span class="dimension-score-container">
+            <span class="dimension-score-display" title="点击编辑" contenteditable="true">70</span>（该项分数）
+        </span>
+            </div>
+            <div class="criteria-list">
+                <div class="add-criteria">
+                    <span>+ 添加评分项</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产品/项目表现部分 - 需要修正 -->
+        <div class="dimension-section">
+            <div class="dimension-header">
+                <div class="dimension-title">产品/项目表现</div>
+                <span class="dimension-score-container">
+            <span class="dimension-score-display" title="点击编辑" contenteditable="true">10</span>（该项分数）
+        </span>
+            </div>
+            <!-- 产品/项目表现不需要添加评分项 -->
+        </div>
+
+        <div class="section-title">等级分值设置</div>
+        <div class="distribution-grid">
+            <div class="distribution-item">
+                <!-- 等级分值设置部分 -->
+                <div class="distribution-grid">
+                    <div class="grade-wrapper">
+                        <div class="grade-pair">
+                            <span>A</span>
+                            <input type="number" class="grade-input" value="10">
+                        </div>
+                        <div class="grade-pair">
+                            <span>B+</span>
+                            <input type="number" class="grade-input" value="9">
+                        </div>
+                        <div class="grade-pair">
+                            <span>B</span>
+                            <input type="number" class="grade-input" value="7">
+                        </div>
+                        <div class="grade-pair">
+                            <span>C</span>
+                            <input type="number" class="grade-input" value="2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-section">
+            <button id="backButton" class="backButton">返回</button>
+            <button id="submitForm" class="submit-button">提交</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edittable.js') }}"></script>
+<script>
+    // 获取 checkbox 和百分比输入框
+    const forcedDistributionSwitch = document.getElementById('forcedDistributionSwitch');
+    const distributionPercentage = document.getElementById('distributionPercentage');
+
+    // 设置初始状态
+    if (!forcedDistributionSwitch.checked) {
+        distributionPercentage.disabled = true; // 默认禁用输入框
+    }
+
+    // 添加事件监听器，当 checkbox 状态改变时执行
+    forcedDistributionSwitch.addEventListener('change', function() {
+        if (this.checked) {
+            distributionPercentage.disabled = false; // 勾选时启用输入框
+        } else {
+            distributionPercentage.disabled = true; // 未勾选时禁用输入框
+        }
+    });
+
+</script>
+</body>
+</html>

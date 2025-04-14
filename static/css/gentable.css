@@ -1,0 +1,768 @@
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+}
+
+.content h1 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .content {
+        margin-left: 200px;
+    }
+}
+
+.container {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.date-display {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+
+.section-title {
+    font-weight: bold;
+    margin: 20px 0 10px;
+    padding: 10px;
+    background: #1a73e8;
+    color: white;
+    border-radius: 4px;
+}
+
+
+.criteria-item .remove {
+    margin-left: auto;
+    color: #999;
+    cursor: pointer;
+    padding: 5px;
+}
+.max-score {
+    font-size: 13px;
+    color: #666;
+    margin-left: 8px;
+    font-weight: normal;
+}
+
+.dimension-section {
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.dimension-title {
+    font-weight: 600;
+    color: #1a73e8;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1a73e8;
+}
+
+.criteria-list {
+    padding-left: 15px;
+}
+
+/* 修改现有的criteria-item样式 */
+
+.add-criteria {
+    color: #1a73e8;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.distribution-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.distribution-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.score-input {
+    width: 60px;
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 15px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #1a73e8;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.info-text {
+    color: #666;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.info-link {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+/* 时间选择器样式 */
+.date-input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 等级分值输入框样式 */
+.distribution-grid {
+    margin: 10px 0;
+}
+
+.grade-wrapper {
+    display: flex;
+    justify-content: space-around; /* 改用space-around来增加间距 */
+    padding: 20px;  /* 增加内边距 */
+    background: #f8f9fa;
+    border-radius: 4px;
+    gap: 40px;  /* 添加固定间距 */
+}
+
+.grade-pair {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 100px;  /* 设置最小宽度 */
+}
+
+.grade-input {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* 考勤规则样式调整 */
+.score-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.score-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.score-input {
+    width: 60px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 提交按钮区域样式 */
+.submit-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.submit-button {
+    background-color: #1a73e8;
+    color: white;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #1557b0;
+}
+
+.submit-button:active {
+    background-color: #0d47a1;
+}
+
+
+/* 部门选择框容器 */
+.department-select-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 标签和下拉框之间的间距 */
+    margin-bottom: 15px; /* 与下方 "考核维度" 之间留白 */
+    font-size: 16px;
+}
+
+/* 下拉框本身 */
+#department-select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+
+    /* 移除默认箭头 */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* 自定义箭头 */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='%23007bff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* 右侧留白 */
+    background-size: 14px;
+}
+
+
+/* 鼠标悬停时的效果 */
+#department-select:hover {
+    border-color: #007bff;
+}
+
+/* 下拉框展开时的效果 */
+#department-select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.criteria-text {
+    flex: 1;
+    margin-right: 10px;
+    min-width: 0; /* 确保可以缩小 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.criteria-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #eee;
+    margin: 5px 0;
+    border-radius: 4px;
+    background: white;
+}
+
+
+.criteria-input {
+    flex: 1;
+    padding: 5px;
+}
+
+.percentage-display {
+    width: 60px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.percentage-input {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+}
+
+.dimension-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+
+/* 原有的CSS保持不变 */
+
+/* 修改维度分数的CSS，使其更加醒目 */
+.dimension-score-display {
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 18px;         /* 增大字体 */
+    color: #e74c3c;          /* 使用醒目的红色 */
+    background-color: #f9f9f9; /* 轻微的背景色 */
+    border-radius: 4px;      /* 圆角边框 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* 轻微阴影 */
+    transition: all 0.2s;    /* 平滑过渡效果 */
+}
+
+.dimension-score-display:hover {
+    background-color: #f0f0f0; /* 悬停时背景变化 */
+    transform: scale(1.05);    /* 轻微放大效果 */
+}
+
+.dimension-score-input {
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 18px;         /* 与显示保持一致 */
+    color: #e74c3c;          /* 保持颜色一致 */
+    border: 2px solid #e74c3c; /* 醒目的边框 */
+    border-radius: 4px;
+    outline: none;           /* 移除默认的输入框外边框 */
+}
+
+.dimension-header span:last-child {
+    margin-left: 5px;
+    font-size: 14px;
+    color: gray;
+}
+/* 添加评级/打分模式选择下拉框的样式 */
+.evaluation-mode-select {
+    margin: 0 15px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.evaluation-mode-select:hover {
+    border-color: #1a73e8;
+}
+
+.evaluation-mode-select:focus {
+    border-color: #1a73e8;
+    outline: none;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+}
+
+/* 调整维度标题区域布局 */
+.dimension-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.dimension-title {
+    font-weight: 600;
+    color: #1a73e8;
+    margin-bottom: 0; /* 覆盖原有的下边距 */
+    padding-bottom: 0; /* 覆盖原有的内边距 */
+    border-bottom: none; /* 移除下边框，因为现在是flex布局 */
+    flex: 0 0 auto; /* 防止标题被挤压 */
+}
+
+/* 分数显示区域调整 */
+.dimension-score-container {
+    margin-left: auto; /* 将分数推到右侧 */
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 打分模式下的分值显示样式 */
+.score-value-container {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.score-value-display {
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    font-weight: bold;
+    color: #3498db; /* 使用蓝色区分于百分比的红色 */
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.score-value-display:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
+/* 可编辑元素的样式 */
+[contenteditable="true"] {
+    border: 1px dashed #1a73e8;
+    background-color: #fff;
+    outline: none;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* 调整评分项的样式，确保与现有样式兼容 */
+.criteria-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #eee;
+    margin: 5px 0;
+    border-radius: 4px;
+    background: white;
+    transition: background-color 0.2s;
+}
+
+.criteria-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 确保删除按钮样式一致 */
+.remove {
+    color: #e74c3c;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.remove:hover {
+    transform: scale(1.2);
+}
+
+/* 添加评分项按钮样式调整 */
+.add-criteria {
+    color: #1a73e8;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 10px 0 5px;
+    transition: transform 0.2s;
+}
+
+.add-criteria:hover {
+    transform: translateX(5px);
+}
+
+/* 在维度标题下方添加分隔线 */
+.dimension-header::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #1a73e8;
+    margin-top: 8px;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+}
+
+/* 确保维度标题区域有相对定位 */
+.dimension-header {
+    position: relative;
+    padding-bottom: 15px; /* 为分隔线留出空间 */
+}
+
+/* 评分项容器样式 */
+.criteria-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.criteria-item:hover {
+    background-color: #f9f9f9;
+}
+
+/* 评分项文本样式 */
+
+/* 分数/百分比容器样式 */
+.score-value-container {
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+/* 详细信息按钮 */
+.detail-toggle {
+    cursor: pointer;
+    padding: 2px 5px;
+    margin-right: 8px;
+    font-size: 12px;
+    color: #4a90e2;
+    white-space: nowrap;
+}
+
+/* 删除按钮样式 */
+.remove {
+    cursor: pointer;
+    color: #999;
+    margin-left: auto; /* 保持在最右侧 */
+    padding: 2px 5px;
+}
+
+.remove:hover {
+    color: #e74c3c;
+}
+
+/* 详细信息容器样式 - 占据整行 */
+.criteria-detail-container {
+    width: 100%;
+    margin-top: 5px;
+    display: none; /* 默认隐藏 */
+}
+
+/* 详细信息文本框基本样式 */
+.criteria-detail {
+    width: 100%;
+    min-height: 120px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #333;
+    transition: border-color 0.2s ease-in-out;
+    resize: vertical;
+}
+
+/* 获取焦点时的样式 */
+.criteria-detail:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* 气泡编辑器样式 */
+.more-detail-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.more-detail-icon {
+    cursor: pointer;
+    color: #666;
+    font-size: 18px; /* 增大图标 */
+    transition: color 0.3s;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.more-detail-icon:hover {
+    color: #0078d7;
+    background-color: #f0f0f0;
+}
+
+.more-detail-icon.has-content {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+/* 气泡编辑器样式 */
+.bubble-editor {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+    min-width: 400px; /* 最小宽度 */
+    min-height: 220px; /* 最小高度 */
+    z-index: 1000;
+    padding: 15px;
+    box-sizing: border-box;
+    transition: width 0s, height 0s; /* 平滑过渡效果 */
+}
+
+.bubble-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.close-bubble {
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+.close-bubble:hover {
+    color: #ff4d4f;
+    background-color: #f0f0f0;
+}
+
+.more-detail-content {
+    width: calc(100% - 30px); /* 减去左右内边距 */
+    min-height: 150px;
+    padding: 8px;
+    margin: 15px; /* 左右上内边距 */
+    margin-bottom: 25px; /* 增加底部边距 */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: both; /* 允许双向调整大小 */
+    font-size: 14px;
+    line-height: 1.5;
+    overflow: auto;
+}
+
+/* 确保文本域的调整手柄可见 */
+.more-detail-content::-webkit-resizer {
+    border: 2px solid #ddd;
+    background: #f0f0f0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* 箭头样式 */
+.bubble-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.arrow-left {
+    left: -10px;
+    top: 30px; /* 对准图标中心线 */
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid white;
+    z-index: 2; /* 确保箭头在最上层 */
+}
+
+.arrow-right {
+    right: -10px;
+    top: 30px; /* 对准图标中心线 */
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid white;
+    z-index: 2; /* 确保箭头在最上层 */
+}
+
+/* 确保箭头边框效果 */
+.arrow-left::before {
+    content: '';
+    position: absolute;
+    right: 1px;
+    top: -10px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #ccc;
+    z-index: -1;
+}
+
+.arrow-right::before {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: -10px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #ccc;
+    z-index: -1;
+}

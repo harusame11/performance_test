@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限不足</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 100px;
+        }
+        .container {
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid red;
+            background-color: #ffecec;
+            border-radius: 10px;
+        }
+    </style>
+    <script>
+        let count = 3; // 倒计时 3 秒
+        function countdown() {
+            document.getElementById("countdown").innerText = count;
+            if (count <= 0) {
+                window.location.href = "/performance_query"; // 3秒后跳转到主页
+            } else {
+                count--;
+                setTimeout(countdown, 1000);
+            }
+        }
+        window.onload = countdown;
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>🚫 权限不足！</h2>
+    <p>你无权访问此页面，将在 <span id="countdown">3</span> 秒后返回主页...</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+/* 全局样式 */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* 登录容器 */
+.login-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* 标题样式 */
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* 输入框样式 */
+input {
+    width: 80%;
+    padding: 12px;
+    margin: 8px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+input[type="password"] {
+    margin-bottom: 30px;
+}
+/* 按钮样式 */
+button {
+    width: 80%;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+/* 提示信息 */
+#message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* 修改密码链接 */
+a {
+    display: inline-block;
+    margin-top: 15px;
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
