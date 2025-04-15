@@ -463,5 +463,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// 添加导出功能
+document.getElementById('exportWorkingRate').addEventListener('click', async function() {
+    try {
+        const response = await fetch('/api/export_working_rate', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '工时统计详情.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        } else {
+            alert('导出失败，请重试');
+        }
+    } catch (error) {
+        console.error('导出错误:', error);
+        alert('导出失败，请重试');
+    }
+});
+
 
 

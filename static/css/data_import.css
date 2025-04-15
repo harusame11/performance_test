@@ -257,3 +257,61 @@ background-color: #219a52;
     word-break: break-all;
 }
 
+
+/* 添加统计行样式 */
+.department-stats {
+    background-color: #f0f7ff;  /* 浅蓝色背景 */
+    border-left: 3px solid #1890ff;  /* 左边框突出显示 */
+    font-weight: 500;
+    padding: 12px 8px;
+}
+
+/* 成员数据行样式 */
+.assessment-row {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+/* 鼠标悬停效果 */
+.assessment-row:hover {
+    background-color: #fafafa;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;  /* 按钮之间的间距 */
+    margin: 10px 0;
+}
+
+.upload-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+}
+
+.upload-section h2 {
+    margin-bottom: 30px;  /* 增加标题下方间距 */
+}
+
+.file-group {
+    margin-bottom: 20px;  /* 增加每个文件组之间的间距 */
+}
+
+.file-group label {
+    display: block;  /* 让label单独占一行 */
+    margin-bottom: 10px;  /* 增加label和input之间的间距 */
+}
+
+.upload-container {
+    padding: 30px;  /* 增加整个容器的内边距 */
+}

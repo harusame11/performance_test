@@ -69,37 +69,17 @@
                             <label>第三张表格：</label>
                             <input type="file" name="file3" accept=".xls,.xlsx" required>
                         </div>
-                        <button type="submit" class="upload-btn">上传所有表格</button>
+                        <div class="button-container">
+                            <button type="submit" class="upload-btn">
+                                <i class="fas fa-upload"></i> 上传所有表格
+                            </button>
+                            <button id="exportWorkingRate" class="upload-btn">
+                                <i class="fas fa-download"></i> 导出工时统计
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
-
-
-<!--            <div class="upload-section">-->
-<!--                <h2>数据统计</h2>-->
-<!--&lt;!&ndash;                <div class="summary-box">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="summary-item">&ndash;&gt;-->
-<!--&lt;!&ndash;                        合并后总工时: <span id="totalHours" class="summary-value">0</span> 小时&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-
-<!--            <div class="table-container">-->
-<!--                <table class="data-table">-->
-<!--                    <thead>-->
-<!--                        <tr>-->
-<!--                            <th>姓名</th>-->
-<!--                            <th>总工时</th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody id="dataTableBody">-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
     </div>
 <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 <script src="{{ url_for('static', filename='js/data_import.js') }}"></script>

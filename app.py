@@ -20,7 +20,12 @@ from Entity.department import Department
 from Entity.assessments import Assessments
 from Entity.working_rate import Working_rate
 from Entity.import_history import ImportHistory
+# from performance.test import get_password, to_pinyin
 from test import get_password, to_pinyin
+
+from openpyxl import Workbook
+from io import BytesIO
+from flask import send_file
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app, supports_credentials=True)
@@ -54,7 +59,6 @@ def edittable():
 
     try:
         ProGrade = des["专业职能"]["分数"]
-        print("ProGrade:",ProGrade)
         ProGradeList = des["专业职能"]["评分项"]
         GradeMethod = des["专业职能"]["评分方式"]
         if GradeMethod == "评级":
@@ -653,7 +657,6 @@ def submit_score():
         professional_data = data.get('professional')
         general_data = data.get('general')
         product_score = data.get('product')
-        print("product_score:",product_score)
         details = data.get('details', {})
         extra_bonus = data.get('extraBonus', {"score": 0, "reason": ""})
 
@@ -704,23 +707,14 @@ def submit_score():
 
             # 确保 allavgattendance 不为空
             if allavgattendance:
-                # 排序并去重，确保正确的排名次序（假设从高到低）
-                sorted_attendance = sorted(allavgattendance, reverse=True)
+                # 找到 avgattendance 在排序后的 allavgattendance 中的排名索引
+                rank_index = allavgattendance.index(avgattendance)
 
-                # 获取当前 avgattendance 的排名（从 1 开始）
-                rank_index = sorted_attendance.index(avgattendance) + 1
+                # 计算排名百分比
+                percentile = 1 - (rank_index / len(allavgattendance))
 
-                # 根据排名分配分数
-                if rank_index == 1:
-                    depart_working_rate = 10
-                elif rank_index in [2, 3]:
-                    depart_working_rate = 8
-                elif 4 <= rank_index <= 7:
-                    depart_working_rate = 6
-                elif 8 <= rank_index <= 9:
-                    depart_working_rate = 4
-                else:
-                    depart_working_rate = 2
+                # 计算 working_rate
+                depart_working_rate = 10 * percentile
             else:
                 depart_working_rate = 0  # 如果没有有效数据，则设为 0
         working_rate_value = working_rate.rate
@@ -770,8 +764,7 @@ def submit_score():
                 current_abi_score = abi_score
 
             # 重新计算总分
-
-            new_total_score = current_abi_score + current_product_score + current_extra_bonus + working_rate_value + depart_working_rate
+            new_total_score = current_abi_score + current_product_score + current_extra_bonus
             existing_assessment.totalscore = new_total_score
 
             # 更新等级
@@ -984,7 +977,6 @@ def submit_evaluation():
 
     try:
         ProGrade = des["专业职能"]["分数"]
-        print("ProGrade:",ProGrade)
         ProGradeList = des["专业职能"]["评分项"]
         GradeMethod = des["专业职能"]["评分方式"]
         if GradeMethod == "评级":
@@ -1232,15 +1224,6 @@ def adduser():
         User.add_user(emp_name=emp_name, emp_id=emp_id, position=position, departmentid=department_id,
                       productid=productid, isSA=isSA, isRJ=isRJ, isPJ=isPJ, directJudgeid=directJudgeid,
                       ProductGroup=ProductGroup, immediate_leader=immediate_leader, department=department)
-        users = User.query.filter_by(departmentid=department_id).all()
-        length = len(users)
-        attandance = 0
-        for user in users:
-            workingtime = Working_rate.query.filter_by(emp_id=user.emp_id).first()
-            if workingtime:
-                attandance += workingtime.work_hours
-        Depart = Department.query.filter_by(id=department_id).first()
-        Depart.avgattendance = attandance / length
         if isRJ:
             manageDepart = request.get_json()["manageDepartment"]
             department = Department.query.filter_by(id=manageDepart).first()
@@ -1285,7 +1268,6 @@ def edituser():
     isPJ = request.get_json()["is_product_manager"] or None
     directJudgeid = request.get_json()["product_line_rater"] or None
     user = User.query.filter_by(emp_id=emp_id).first()
-    origindepartment_id = user.departmentid
     department = Department.query.filter_by(id=department_id).first()
     immediate_leader_id = None
     ProductGroup = None
@@ -1299,28 +1281,6 @@ def edituser():
         user.change_info(emp_name=emp_name, emp_id=None, position=position, departmentid=department_id,
                          productid=product_id, isSA=isSA, isRJ=isRJ, isPJ=isPJ, directJudgeid=directJudgeid,
                          ProductGroup=ProductGroup, immediate_leader=immediate_leader_id, department=department.name)
-        db.session.commit()
-
-        origini_depart_users = User.query.filter_by(departmentid=origindepartment_id).all()
-        length = len(origini_depart_users)
-        attandance = 0
-        for user in origini_depart_users:
-            workingtime = Working_rate.query.filter_by(emp_id=user.emp_id).first()
-            if workingtime:
-                attandance += workingtime.work_hours
-        Depart = Department.query.filter_by(id=origindepartment_id).first()
-        if length > 0:
-            Depart.avgattendance = attandance / length
-        else:
-            Depart.avgattendance = 0
-        newattandance = 0
-        newusers = User.query.filter_by(departmentid=department_id).all()
-        for user in newusers:
-            workingtime = Working_rate.query.filter_by(emp_id=user.emp_id).first()
-            if workingtime:
-                newattandance += workingtime.work_hours
-        newDepart = Department.query.filter_by(id=department_id).first()
-        newDepart.avgattendance = newattandance / len(newusers)
         if isRJ:
             manageDepart = request.get_json()["manageDepartment"]
             department = Department.query.filter_by(id=manageDepart).first()
@@ -1360,21 +1320,7 @@ def deleteuser():
     emp_id = request.get_json()["empno"]
     print(emp_id)
     try:
-        departmentid = User.query.filter_by(emp_id=emp_id).first().departmentid
-        department = Department.query.filter_by(id=departmentid).first()
         User.delete_user(emp_id)
-        users = User.query.filter_by(departmentid=departmentid).all()
-        length = len(users)
-        attandance = 0
-        for user in users:
-            workingtime = Working_rate.query.filter_by(emp_id=user.emp_id).first()
-            if workingtime:
-                attandance += workingtime.work_hours
-        if length > 0:
-            department.avgattendance = attandance / length
-        else:
-            department.avgattendance = 0
-        db.session.commit()
         return jsonify({"message": "用户删除成功"}), 200
     except Exception as e:
         print("error:", e)
@@ -1402,38 +1348,6 @@ def change_password():
 
     return jsonify({"message": "密码修改成功"}), 200
 
-
-def calculate_rate(total_hours_dict):
-    # 将工时按降序排序
-    sorted_hours = sorted(total_hours_dict.items(), key=lambda x: x[1], reverse=True)
-    total_people = len(sorted_hours)
-
-    # 计算每个分数段的人数（向上取整）
-    segment_size = math.ceil(total_people * 0.2)
-
-    rates = {}
-    current_index = 0
-
-    # 遍历排序后的工时列表，分配分数
-    for i, (name, hours) in enumerate(sorted_hours):
-        # 如果当前工时与前一个相同，给相同的分数
-        if i > 0 and hours == sorted_hours[i - 1][1]:
-            rates[name] = rates[sorted_hours[i - 1][0]]
-        else:
-            # 根据当前位置计算分数
-            if current_index < segment_size:  # 前20%
-                rates[name] = 5
-            elif current_index < segment_size * 2:  # 20%-40%
-                rates[name] = 4
-            elif current_index < segment_size * 3:  # 40%-60%
-                rates[name] = 3
-            elif current_index < segment_size * 4:  # 60%-80%
-                rates[name] = 2
-            else:  # 80%-100%
-                rates[name] = 1
-        current_index += 1
-
-    return rates
 
 
 def calculate_rate(total_hours_dict):
@@ -1589,8 +1503,8 @@ def upload_performance():
                         parental_days = float(row['育儿假(天)']) if pd.notna(row['育儿假(天)']) else 0.0
 
                         leave_hours = 7.5 * (maternity_days + paternity_days + marriage_days +
-                                             funeral_days + parental_days + business_hours)
-                        total_hours = work_hours + nursing_hours + leave_hours
+                                             funeral_days + parental_days)
+                        total_hours = work_hours + business_hours + nursing_hours + leave_hours
 
                         # 累加到总工时字典
                         if name in all_hours:
@@ -1721,43 +1635,83 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@app.route('/api/export_working_rate', methods=['GET'])
+@jwt_required()
+def export_working_rate():
+    # 验证用户权限
+    decoded_token = json.loads(get_jwt_identity())["userinfo"]
+    isSA = decoded_token["isSA"]
+
+    if not isSA:
+        return jsonify({'success': False, 'message': '权限不足，仅系统管理员可以导出工时文件'}), 406
+
+    try:
+        # 获取数据并按工时降序排序
+        working_rates = Working_rate.query.order_by(Working_rate.work_hours.desc()).all()
+
+        # 创建工作簿
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "工时统计"
+
+        # 添加表头
+        headers = ['员工ID', '员工姓名', '总工时', '评分']
+        ws.append(headers)
+
+        # 添加数据
+        for rate in working_rates:
+            ws.append([
+                rate.emp_id,
+                rate.emp_name,
+                rate.work_hours,
+                rate.rate
+            ])
+
+        # 调整列宽
+        for column in ws.columns:
+            max_length = 0
+            column = list(column)
+            for cell in column:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(str(cell.value))
+                except:
+                    pass
+            adjusted_width = (max_length + 2)
+            ws.column_dimensions[column[0].column_letter].width = adjusted_width
+
+        # 保存到内存
+        excel_file = BytesIO()
+        wb.save(excel_file)
+        excel_file.seek(0)
+
+        return send_file(
+            excel_file,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name='工时统计详情.xlsx'
+        )
+
+    except Exception as e:
+        print(f"导出工时统计错误: {str(e)}")
+        return jsonify({'success': False, 'message': '导出失败'}), 500
+
+
+
 # 获取部门列表
 @app.route('/api/departments', methods=['GET'])
-@jwt_required()
 def get_departments():
     try:
-        # 获取用户身份信息
-        token = get_jwt_identity()
-        userinfo = json.loads(token)["userinfo"]
-        isSA = userinfo.get("isSA", False)
-        emp_id = userinfo.get("emp_id")
-
-        # 查询部门信息
-        if isSA:
-            # 超级管理员可以看到所有部门
-            departments = Department.query.all()
-        else:
-            # 部门管理员只能看到自己的部门
-            departments = Department.query.filter_by(leader_id=emp_id).all()
-
-        # 格式化返回数据
-        departments_data = [{
-            'id': dept.id,
-            'name': dept.name,
-            'leader_id': dept.leader_id
-        } for dept in departments]
+        # 从数据库获取部门信息
+        departments = db.session.query(Department).all()
 
         return jsonify({
             'success': True,
-            'departments': departments_data
+            'departments': [{'id': dept.id, 'name': dept.name} for dept in departments]
         })
-
     except Exception as e:
-        print(f"获取部门信息错误: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': '获取部门信息失败'
-        }), 500
+        print(f"获取部门列表错误: {str(e)}")
+        return jsonify({'success': False, 'message': '获取部门列表失败'})
 
 
 # 根据部门获取版本列表
@@ -1769,10 +1723,19 @@ def get_versions():
         return jsonify({'success': False, 'message': '缺少部门参数'})
 
     try:
-        # 查询指定部门的所有版本
-        versions = db.session.query(AssessmentItems.version) \
-            .filter(AssessmentItems.department == department_id) \
-            .distinct().all()
+        if department_id == 'all':
+            # 如果选择"所有部门"，获取所有版本
+            versions = db.session.query(AssessmentItems.version).distinct().all()
+        else:
+            # 尝试将department_id转换为整数
+            try:
+                dept_id = int(department_id)
+                # 查询指定部门的所有版本
+                versions = db.session.query(AssessmentItems.version) \
+                    .filter(AssessmentItems.department == dept_id) \
+                    .distinct().all()
+            except ValueError:
+                return jsonify({'success': False, 'message': '无效的部门ID'})
 
         return jsonify({
             'success': True,
@@ -1876,15 +1839,10 @@ def get_department_assessments(department_id, version):
 
         # 检查评分方式
         for item in assessment_items:
-            try:
-                description = json.loads(item.description)
+            # try:
+            description = json.loads(item.description)
                 # 检查专业职能中的评分方式
-                prof_scoring = description.get("专业职能", {}).get("评分方式")
-                if prof_scoring != "评级":
-                    return get_normal_assessments(assessment_items)
-            except json.JSONDecodeError as e:
-                print(f"解析description错误: {str(e)}")
-                return get_normal_assessments(assessment_items)
+            prof_scoring = description.get("专业职能", {}).get("评分方式")
 
                 # 统计A和B+的数量
             total_grades = 0
@@ -1904,52 +1862,54 @@ def get_department_assessments(department_id, version):
             for assessment in assessments:
                 try:
                     total_employees += 1
-                    print(f"处理员工ID: {assessment.emp_id}")  # 调试信息
+                    print(f"处理员工ID: {assessment.emp_id}")
 
-
-
-                    # 统计总分和记录每个分数
+                    # 记录总分用于计算平均分和方差
                     if assessment.totalscore is not None:
-                        score = float(assessment.totalscore)  # 确保转换为数值
+                        score = float(assessment.totalscore)
                         total_scores += score
                         scores_list.append(score)
 
-
-
-                    # 处理专业职能评分
-                    if assessment.ProfessionDes:
-                        print(f"专业职能数据: {assessment.ProfessionDes}")
-                        prof_data = json.loads(assessment.ProfessionDes) if isinstance(assessment.ProfessionDes,
-                                                                                       str) else assessment.ProfessionDes
-                        if isinstance(prof_data, list):
-                            for item in prof_data:
-                                grade = item.get('grade', '').strip().upper()
-                                if isinstance(item, dict) and (grade == "A" or grade == "B+"):
+                    if prof_scoring == "评级":
+                        # 评级模式：直接统计专业职能和通用职能的A、B+
+                        if assessment.ProfessionDes:
+                            prof_data = json.loads(assessment.ProfessionDes) if isinstance(assessment.ProfessionDes,
+                                                                                           str) else assessment.ProfessionDes
+                            if isinstance(prof_data, list):
+                                for item in prof_data:
+                                    grade = item.get('grade', '').strip().upper()
+                                    if isinstance(item, dict) and (grade in ["A", "B+"]):
+                                        total_grades += 1
+                    else:
+                        # 打分模式：专业职能按分数换算B+个数
+                        if assessment.ProfessionDes:
+                            prof_data = json.loads(assessment.ProfessionDes) if isinstance(assessment.ProfessionDes,
+                                                                                           str) else assessment.ProfessionDes
+                            if isinstance(prof_data, list):
+                                prof_score = sum(item.get('score', 0) for item in prof_data)
+                                # 按规则换算B+个数
+                                if prof_score >= 27:
+                                    total_grades += 3
+                                elif prof_score >= 20:
+                                    total_grades += 2
+                                else:
                                     total_grades += 1
-                                    print(f"找到一个{grade}评级")
 
-                    # 处理通用职能评分
+                    # 统计通用职能的A、B+（两种模式都需要）
                     if assessment.gendes:
-                        print(f"通用职能数据: {assessment.gendes}")
                         gen_data = json.loads(assessment.gendes) if isinstance(assessment.gendes,
                                                                                str) else assessment.gendes
                         if isinstance(gen_data, list):
                             for item in gen_data:
                                 grade = item.get('grade', '').strip().upper()
-                                if isinstance(item, dict) and (grade == "A" or grade == "B+"):
+                                if isinstance(item, dict) and (grade in ["A", "B+"]):
                                     total_grades += 1
-                                    print(f"找到一个{grade}评级")
 
-                except json.JSONDecodeError as e:
-                    print(f"解析评分数据错误: {str(e)}")
-                    continue
                 except Exception as e:
                     print(f"处理评分数据错误: {str(e)}")
                     continue
 
             print(f"统计结果 - 总评级数: {total_grades}, 总员工数: {total_employees}")  # 调试信息
-
-
 
             # 计算统计数据
             if total_employees > 0 and scores_list:
@@ -1960,8 +1920,6 @@ def get_department_assessments(department_id, version):
                 variance = round(squared_diff_sum / total_employees, 2)
             else:
                 avg_score = variance = 0
-
-
 
             # 计算平均值
             avg_grades = round(total_grades / total_employees, 2) if total_employees > 0 else 0
@@ -2160,4 +2118,5 @@ def edit_table():
 
 
 if __name__ == '__main__':
-    app.run('192.168.0.122', port=5000, debug=True)
+    # app.run('192.168.0.122', port=5000, debug=True)
+    app.run('127.0.0.1', port=5000, debug=True)
