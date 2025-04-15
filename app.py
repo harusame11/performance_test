@@ -20,8 +20,8 @@ from Entity.department import Department
 from Entity.assessments import Assessments
 from Entity.working_rate import Working_rate
 from Entity.import_history import ImportHistory
-# from performance.test import get_password, to_pinyin
-from test import get_password, to_pinyin
+from performance.test import get_password, to_pinyin
+#from test import get_password, to_pinyin（本地测试路径）
 
 from openpyxl import Workbook
 from io import BytesIO
@@ -2118,5 +2118,5 @@ def edit_table():
 
 
 if __name__ == '__main__':
-    # app.run('192.168.0.122', port=5000, debug=True)
-    app.run('127.0.0.1', port=5000, debug=True)
+    app.run('192.168.0.122', port=5000, debug=True)
+    #app.run('127.0.0.1', port=5000, debug=True)
