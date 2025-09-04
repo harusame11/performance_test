@@ -21,7 +21,7 @@ from Entity.assessments import Assessments
 from Entity.working_rate import Working_rate
 from Entity.import_history import ImportHistory
 from performance.test import get_password, to_pinyin
-#from test import get_password, to_pinyin（本地测试路径）
+#from test import get_password, to_pinyin#（本地测试路径）
 
 from openpyxl import Workbook
 from io import BytesIO
@@ -1492,15 +1492,22 @@ def upload_performance():
                     name = str(row['姓名']).strip()
                     if name and name != 'nan':
                         # 计算当前表格的工时
-                        work_hours = float(row['工作时长']) if pd.notna(row['工作时长']) else 0.0
-                        business_hours = float(row['出差时长']) if pd.notna(row['出差时长']) else 0.0
-                        nursing_hours = float(row['哺乳假(小时)']) if pd.notna(row['哺乳假(小时)']) else 0.0
+                        work_hours = float(row.get('工作时长', 0)) if pd.notna(row.get('工作时长')) else 0.0
+                        business_hours = float(row.get('出差时长', 0)) if pd.notna(
+                            row.get('出差时长')) else 0.0
+                        nursing_hours = float(row.get('哺乳假(小时)', 0)) if pd.notna(
+                            row.get('哺乳假(小时)')) else 0.0
 
-                        maternity_days = float(row['产假(天)']) if pd.notna(row['产假(天)']) else 0.0
-                        paternity_days = float(row['陪产假(天)']) if pd.notna(row['陪产假(天)']) else 0.0
-                        marriage_days = float(row['婚假(天)']) if pd.notna(row['婚假(天)']) else 0.0
-                        funeral_days = float(row['丧假(天)']) if pd.notna(row['丧假(天)']) else 0.0
-                        parental_days = float(row['育儿假(天)']) if pd.notna(row['育儿假(天)']) else 0.0
+                        maternity_days = float(row.get('产假(天)', 0)) if pd.notna(
+                            row.get('产假(天)')) else 0.0
+                        paternity_days = float(row.get('陪产假(天)', 0)) if pd.notna(
+                            row.get('陪产假(天)')) else 0.0
+                        marriage_days = float(row.get('婚假(天)', 0)) if pd.notna(
+                            row.get('婚假(天)')) else 0.0
+                        funeral_days = float(row.get('丧假(天)', 0)) if pd.notna(
+                            row.get('丧假(天)')) else 0.0
+                        parental_days = float(row.get('育儿假(天)', 0)) if pd.notna(
+                            row.get('育儿假(天)')) else 0.0
 
                         leave_hours = 7.5 * (maternity_days + paternity_days + marriage_days +
                                              funeral_days + parental_days)
