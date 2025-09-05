@@ -20,8 +20,8 @@ from Entity.department import Department
 from Entity.assessments import Assessments
 from Entity.working_rate import Working_rate
 from Entity.import_history import ImportHistory
-from performance.test import get_password, to_pinyin
-#from test import get_password, to_pinyin#（本地测试路径）
+#from performance.test import get_password, to_pinyin
+from test import get_password, to_pinyin#（本地测试路径）
 
 from openpyxl import Workbook
 from io import BytesIO
@@ -1560,13 +1560,17 @@ def upload_performance():
                 wronglist.append(name)
                 print(f"数据库操作错误: {str(e)}")
                 continue
+        #print(f"部门工时统计操作成功 ")
+        if not update_department_avg_hours():
+            return jsonify({'success': False, 'message': '更新部门平均工时失败'})
         if wronglist is not None:
             return jsonify({'success': False,
     'message': f'更新成功，但以下人员更新失败：{", ".join(map(str, wronglist))}',  # 将列表内容转换为字符串
     'wronglist': wronglist}) , 400
         # 更新部门平均工时
-        if not update_department_avg_hours():
-            return jsonify({'success': False, 'message': '更新部门平均工时失败'})
+        #if not update_department_avg_hours():
+            #return jsonify({'success': False, 'message': '更新部门平均工时失败'})
+
 
         # 提交所有更改
 
@@ -1575,13 +1579,16 @@ def upload_performance():
             'data': processed_data
         })
 
+
     except Exception as e:
         print(f"处理错误: {str(e)}")
         return jsonify({'success': False, 'message': '文件处理出错，请确保文件格式正确'})
 
 
+
 def update_department_avg_hours():
     """更新部门平均工时"""
+    print(f"部门工时统计操作成功 ")
     try:
         # 获取所有工时记录
         all_working_hours = Working_rate.query.all()
@@ -2125,5 +2132,6 @@ def edit_table():
 
 
 if __name__ == '__main__':
-    app.run('192.168.0.122', port=5000, debug=True)
-    #app.run('127.0.0.1', port=5000, debug=True)
+    #app.run('192.168.0.122', port=5000, debug=True)
+    app.run('127.0.0.1', port=5000, debug=True)
+    #app.run('192.168.0.209', port=5000, debug=True)
