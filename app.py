@@ -889,7 +889,7 @@ def showtablelist():
     assessmentlist = []
     tmp = AssessmentItems.query.all()
     for item in tmp:
-        if item.ddl > datetime.now() and user.departmentid == item.department:
+        if  user.departmentid == item.department:
             assessmentlist.append({
                 "name": item.version,
                 "id": item.id
